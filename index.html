@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f8f7" />
+    <title>Ví Nhẹ — Quản lý chi tiêu cá nhân</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="appShell">
+      <aside class="sidebar">
+        <a class="brand" href="#" aria-label="Ví Nhẹ - trang chủ">
+          <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H20v14H6.5A2.5 2.5 0 0 1 4 16.5v-9Z" stroke="currentColor" stroke-width="1.8"/><path d="M4 8h13a3 3 0 0 1 3 3v3h-5a2 2 0 0 1 0-4h5M15 12h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>ví<span class="brand-light">nhẹ</span></span>
+        </a>
+        <div class="sidebar-label">KHÔNG GIAN CỦA BẠN</div>
+        <nav class="main-nav" aria-label="Điều hướng chính">
+          <button class="nav-link active" data-target="overview"><span class="nav-icon">▦</span>Tổng quan</button>
+          <button class="nav-link" data-target="transactions"><span class="nav-icon">⇄</span>Giao dịch</button>
+          <button class="nav-link" data-target="budget"><span class="nav-icon">◷</span>Ngân sách</button>
+          <button class="nav-link" data-target="reports"><span class="nav-icon">▥</span>Báo cáo</button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="tip-card">
+            <div class="tip-icon">✦</div>
+            <p class="tip-title">Mẹo nhỏ hôm nay</p>
+            <p class="tip-copy">Tiết kiệm một chút mỗi ngày, bạn sẽ bất ngờ với kết quả cuối tháng.</p>
+          </div>
+          <div class="profile">
+            <div class="avatar">A</div>
+            <div class="profile-copy"><strong id="profileName">Anh Nguyễn</strong><span id="profileDetails">Tài khoản cá nhân</span></div>
+            <button class="profile-logout" id="signOutButton" hidden>Đăng xuất</button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content" id="overview">
+        <header class="topbar">
+          <div class="breadcrumb"><span>Không gian của bạn</span><span class="breadcrumb-sep">/</span><strong>Tổng quan</strong></div>
+          <div class="topbar-actions">
+            <span class="sync-status local-mode" id="syncStatus"><span></span>Chỉ lưu trên thiết bị</span>
+            <button class="text-button import-button" id="importLocalButton" hidden>Nhập dữ liệu trên thiết bị này</button>
+            <button class="text-button mobile-signout" id="mobileSignOut" hidden>Đăng xuất</button>
+            <label class="month-control">
+              <span class="sr-only">Chọn tháng</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9h17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <input type="month" id="monthPicker" />
+            </label>
+            <button class="avatar avatar-small" aria-label="Tài khoản">A</button>
+          </div>
+        </header>
+
+        <section class="welcome-row">
+          <div><p class="eyebrow" id="todayLabel">THỨ HAI, 01 THÁNG 01</p><h1>Chào buổi sáng, Anh <span>✳</span></h1><p class="welcome-subtitle">Cùng xem dòng tiền của bạn đang đi đâu nhé.</p></div>
+          <button class="button button-primary" id="openAdd"><span class="plus">+</span> Thêm giao dịch</button>
+        </section>
+
+        <section class="summary-grid" aria-label="Tổng quan tài chính">
+          <article class="summary-card balance-card">
+            <div class="summary-heading"><span>Số dư tháng này</span><span class="card-icon green-icon">↗</span></div>
+            <div class="summary-amount" id="balanceAmount">0 ₫</div>
+            <div class="summary-foot"><span class="status-dot"></span><span id="balanceCaption">Thu nhập trừ chi tiêu trong tháng</span></div>
+            <div class="balance-decoration"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </article>
+          <article class="summary-card">
+            <div class="summary-heading"><span>Tổng thu nhập</span><span class="card-icon income-icon">↓</span></div>
+            <div class="summary-amount" id="incomeAmount">0 ₫</div>
+            <div class="summary-foot muted"><span id="incomeCount">0 khoản thu</span><span class="trend-up">↗ tháng này</span></div>
+          </article>
+          <article class="summary-card">
+            <div class="summary-heading"><span>Tổng chi tiêu</span><span class="card-icon expense-icon">↑</span></div>
+            <div class="summary-amount" id="expenseAmount">0 ₫</div>
+            <div class="summary-foot muted"><span id="expenseCount">0 khoản chi</span><span class="trend-down">Tháng này</span></div>
+          </article>
+        </section>
+
+        <section class="analytics-grid">
+          <article class="panel spending-panel" id="reports">
+            <div class="panel-heading"><div><h2>Dòng tiền của bạn</h2><p>Chi tiêu trong 7 ngày gần nhất</p></div><button class="select-button" id="chartRange">7 ngày <span>⌄</span></button></div>
+            <div class="chart-legend"><span><i class="legend-dot legend-expense"></i>Chi tiêu</span><span><i class="legend-dot legend-income"></i>Thu nhập</span></div>
+            <div class="chart-wrap" id="weeklyChart" role="img" aria-label="Biểu đồ thu nhập và chi tiêu trong tuần"></div>
+          </article>
+          <article class="panel category-panel">
+            <div class="panel-heading"><div><h2>Chi tiêu theo danh mục</h2><p>Phân bổ tháng này</p></div><button class="icon-button" aria-label="Tùy chọn danh mục">···</button></div>
+            <div class="category-content">
+              <div class="donut-wrap"><div class="donut" id="categoryDonut"><div class="donut-hole"><strong id="categoryTotal">0 ₫</strong><span>Tổng chi</span></div></div></div>
+              <div class="category-legend" id="categoryLegend"></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel transactions-panel" id="transactions">
+            <div class="panel-heading transaction-heading"><div><h2>Giao dịch gần đây</h2><p>Theo dõi những khoản thu chi mới nhất</p></div><button class="text-button" id="viewAll">Xem tất cả <span>→</span></button></div>
+            <div class="transaction-toolbar">
+              <div class="filter-tabs" role="group" aria-label="Lọc giao dịch">
+                <button class="filter-tab selected" data-filter="all">Tất cả</button>
+                <button class="filter-tab" data-filter="expense">Chi tiêu</button>
+                <button class="filter-tab" data-filter="income">Thu nhập</button>
+              </div>
+              <label class="search-box"><span aria-hidden="true">⌕</span><input type="search" id="searchInput" placeholder="Tìm giao dịch..." /></label>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>GIAO DỊCH</th><th>DANH MỤC</th><th>NGÀY</th><th class="amount-column">SỐ TIỀN</th><th></th></tr></thead>
+                <tbody id="transactionRows"></tbody>
+              </table>
+              <div class="empty-state" id="emptyState" hidden><span>◎</span><strong>Chưa có giao dịch nào</strong><p>Thêm khoản thu hoặc chi đầu tiên của bạn nhé.</p><button class="button button-light" id="emptyAdd">+ Thêm giao dịch</button></div>
+            </div>
+          </article>
+          <aside class="panel budget-panel" id="budget">
+            <div class="panel-heading"><div><h2>Ngân sách tháng</h2><p>Giữ chi tiêu trong tầm kiểm soát</p></div><button class="icon-button" id="editBudget" aria-label="Chỉnh ngân sách">✎</button></div>
+            <div class="budget-total"><strong id="budgetSpent">0 ₫</strong><span> / <span id="budgetLimit">0 ₫</span></span></div>
+            <div class="progress-track"><div class="progress-fill" id="budgetProgress"></div></div>
+            <div class="budget-caption"><span>Đã sử dụng</span><strong id="budgetPercent">0%</strong></div>
+            <div class="budget-note" id="budgetNote"><span class="note-spark">✦</span><span>Bạn đang quản lý chi tiêu rất tốt!</span></div>
+            <div class="budget-divider"></div>
+            <div class="budget-categories-heading">DANH MỤC NỔI BẬT <span>THÁNG NÀY</span></div>
+            <div class="budget-category-list" id="budgetCategoryList"></div>
+          </aside>
+        </section>
+        <footer class="footer-note">Được tạo để bạn an tâm với từng đồng tiền của mình. <span>♡</span></footer>
+      </main>
+    </div>
+
+    <section class="auth-screen" id="authScreen" hidden>
+      <div class="auth-card">
+        <a class="brand auth-brand" href="#" aria-label="Ví Nhẹ">
+          <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H20v14H6.5A2.5 2.5 0 0 1 4 16.5v-9Z" stroke="currentColor" stroke-width="1.8"/><path d="M4 8h13a3 3 0 0 1 3 3v3h-5a2 2 0 0 1 0-4h5M15 12h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>ví<span class="brand-light">nhẹ</span></span>
+        </a>
+        <span class="modal-kicker">DỮ LIỆU RIÊNG CỦA BẠN</span>
+        <h1 id="authTitle">Đăng nhập Ví Nhẹ</h1>
+        <p class="auth-description">Đăng nhập cùng một tài khoản trên máy tính và điện thoại để đồng bộ dữ liệu.</p>
+        <p class="auth-message" id="authMessage" role="status" aria-live="polite"></p>
+        <form id="authForm">
+          <label class="field-label" for="authEmail">Email</label>
+          <input class="form-input" id="authEmail" name="email" type="email" autocomplete="email" placeholder="ban@email.com" required />
+          <label class="field-label" for="authPassword">Mật khẩu</label>
+          <input class="form-input" id="authPassword" name="password" type="password" autocomplete="current-password" minlength="8" placeholder="Ít nhất 8 ký tự" required />
+          <button class="button button-primary auth-submit" id="authSubmit" type="submit">Đăng nhập</button>
+        </form>
+        <button class="auth-mode-toggle" id="authModeToggle" type="button">Chưa có tài khoản? Tạo tài khoản</button>
+        <button class="button button-light auth-retry" id="retryCloudLoad" type="button" hidden>Tải lại dữ liệu</button>
+        <p class="auth-config-help" id="authConfigHelp" hidden>Thiếu cấu hình Supabase. Hãy làm theo hướng dẫn trong file HUONG-DAN-ONLINE.md.</p>
+      </div>
+    </section>
+
+    <div class="modal-backdrop" id="transactionModal" hidden>
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-heading"><div><span class="modal-kicker">QUẢN LÝ TÀI CHÍNH</span><h2 id="modalTitle">Thêm giao dịch mới</h2></div><button class="close-button" id="closeModal" aria-label="Đóng">×</button></div>
+        <form id="transactionForm">
+          <div class="type-switch" role="group" aria-label="Loại giao dịch"><button type="button" class="type-option active" data-type="expense">− Khoản chi</button><button type="button" class="type-option" data-type="income">+ Khoản thu</button></div>
+          <label class="field-label" for="transactionTitle">Tên giao dịch</label>
+          <input class="form-input" id="transactionTitle" name="title" placeholder="Ví dụ: Ăn trưa, lương tháng..." maxlength="60" required />
+          <div class="form-row">
+            <div><label class="field-label" for="transactionAmount">Số tiền (₫)</label><input class="form-input" id="transactionAmount" name="amount" type="number" min="1" step="1" placeholder="0" required /></div>
+            <div><label class="field-label" for="transactionCategory">Danh mục</label><select class="form-input" id="transactionCategory" name="category"></select></div>
+          </div>
+          <label class="field-label" for="transactionDate">Ngày giao dịch</label>
+          <input class="form-input" id="transactionDate" name="date" type="date" required />
+          <div class="modal-actions"><button type="button" class="button button-light" id="cancelModal">Hủy</button><button class="button button-primary" type="submit">Lưu giao dịch <span>→</span></button></div>
+        </form>
+      </section>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
